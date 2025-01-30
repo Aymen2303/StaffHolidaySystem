@@ -1,0 +1,18 @@
+.logo {
+  position: absolute;
+  top: 10px;
+  width: 120px;
+  height: auto; /* Adjust size as needed */
+}
+.left {
+  left: 10px;
+}
+.right {
+  right: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
