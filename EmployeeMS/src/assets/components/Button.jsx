@@ -13,6 +13,7 @@ const Button = ({ onClick, text, color = '#1E90FF' }) => {
         borderRadius: '6px',
         fontSize: '16px',
         fontWeight: 'bold',
+        boxShadow: '#fff',
       }}
     >
       {text}

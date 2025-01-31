@@ -1,0 +1,74 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 35vh;
+    background-color: #1E90FF;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Logo Container */
+.logo-container {
+    text-align: center;
+    margin: 7rem 0;
+}
+
+.logo-container .logo {
+    width: 80px; 
+    margin-left: -2.5rem;
+    margin-bottom: 10px;
+}
+
+.logo-container .logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Log Out Button */
+.sidebar .logout-button {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.main-content .table-placeholder {
+    margin-top: 20px;
+    width: 100%;
+    padding: 20px;
+    height: 75vh;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu-items{
+    margin-bottom: 15rem;
+}
+
+.menu-items .card_item:hover{
+    background-color: var(--yellow);
+}
+
+.user-info-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.date-container {
+    text-align: right;
+}
