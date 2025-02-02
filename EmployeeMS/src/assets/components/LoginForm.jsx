@@ -7,7 +7,7 @@ const LoginForm = ({ onLogin, onForgotPassword }) => {
   const { formData, errors, handleChange, handleSubmit } = useLoginForm(onLogin);
 
   return (
-    <div className="card shadow-lg p-4 rounded" style={{ width: "350px" }}>
+    <div className="card shadow-lg p-4 rounded" style={{ width: '350px' }}>
       <h3 className="text-center mb-3">Log in</h3>
 
       {/* Email Field */}
