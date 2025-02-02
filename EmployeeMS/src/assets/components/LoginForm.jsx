@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useLoginForm from "../functions/useLoginForm";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
@@ -7,6 +7,7 @@ const LoginForm = ({ onLogin, onForgotPassword }) => {
   const { formData, errors, handleChange, handleSubmit } = useLoginForm(onLogin);
 
   return (
+    <form onSubmit={handleSubmit}>
     <div className="card shadow-lg p-4 rounded" style={{ width: '350px' }}>
       <h3 className="text-center mb-3">Log in</h3>
 
@@ -50,8 +51,9 @@ const LoginForm = ({ onLogin, onForgotPassword }) => {
       </div>
 
       {/* Login Button */}
-      <Button onClick={handleSubmit} text="Log in" color="#00843D" />
+      <Button type="submit" onClick={handleSubmit} text="Log in" color="#00843D" />
     </div>
+    </form>
   );
 };
 

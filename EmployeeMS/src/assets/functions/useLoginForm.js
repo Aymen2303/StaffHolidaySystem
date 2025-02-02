@@ -1,48 +1,68 @@
-import { useState } from "react";
+// src/assets/functions/useLoginForm.js
+import { useState } from 'react';
+import { supabase } from './SupabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const useLoginForm = (onLogin) => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-  const validateForm = () => {
-    let newErrors = { email: "", password: "" };
-
-    if (!formData.email) {
-      newErrors.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters long.";
-    } else if (!/[A-Z]/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one uppercase letter.";
-    } else if (!/[a-zA-Z]/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one letter.";
-    } else if (!/[0-9]/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one number.";
-    }
-
-    setErrors(newErrors);
-    return Object.values(newErrors).every((err) => err === ""); // Returns true if no errors
-  };
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onLogin(formData.email, formData.password);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Form submitted');
+
+    // Basic validation
+    const newErrors = {};
+    if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      // Sign in with Supabase
+      console.log('Attempting to log in with:', formData.email);
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error){
+        console.error("Login error:", error.message);
+          setErrors({ general: error.message });
+      return;
+      }
+      // Call the onLogin callback
+      console.log('Login successful:', user);
+      onLogin(user);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({ general: error.message });
     }
   };
 
-  return { formData, errors, handleChange, handleSubmit };
+  return {
+    formData,
+    errors,
+    handleChange,
+    handleSubmit,
+  };
 };
 
 export default useLoginForm;

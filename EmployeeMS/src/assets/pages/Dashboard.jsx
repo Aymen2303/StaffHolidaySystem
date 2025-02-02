@@ -8,9 +8,11 @@ import CardItemView from '../../assets/components/CardItemView';
 import Button from '../../assets/components/Button';
 import UserInfoCard from '../../assets/components/UserInfoCard';
 import '../../assets/styles/Dashboard.css'; 
+import userAuthOut from '../functions/LogOut';
 
 const Dashboard = () => {
     // Placeholder user data (will be replaced with API data later)
+    const { logout } = userAuthOut();
     const user = {
         email: 'user@example.com',
         position: 'Admin',
@@ -36,7 +38,7 @@ const Dashboard = () => {
                 {/* Log Out Button */}
                 <div className="logout-button">
                     <Button
-                        onClick={() => alert('Logging out...')}
+                        onClick={logout}
                         text="Log out"
                         icon={PiSignOutBold}
                         color="#ff4757"

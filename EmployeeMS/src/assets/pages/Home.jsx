@@ -5,9 +5,9 @@ import "./../../assets/styles/index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home = () => {
-  // Handlers for button actions
-  const handleLogin = () => {
-    console.log("Login button clicked");
+  
+  const handleLogin = (user) => {
+    console.log("User logged in:", user);
   };
 
   const handleForgotPassword = () => {
