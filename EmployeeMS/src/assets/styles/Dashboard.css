@@ -72,3 +72,16 @@
 .date-container {
     text-align: right;
 }
+
+.card_item{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.card-item.selected {
+    background-color: var(--yellow); 
+    color: black; 
+  }

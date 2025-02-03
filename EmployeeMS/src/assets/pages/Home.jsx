@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginForm from "./../../assets/components/LoginForm";
 import logo from "../../assets/logo.svg";   
 import "./../../assets/styles/index.css";  
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoginProgressCard from "./../components/Progress";
 
 const Home = () => {
-  
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = (user) => {
     console.log("User logged in:", user);
+    setLoading(false);  // Stop loading after login
   };
 
   const handleForgotPassword = () => {
     console.log("Forgot password clicked");
+  };
+
+  const handleSubmit = async (userData) => {
+    setLoading(true);  // Start loading before calling handleLogin
+    await handleLogin(userData);  
   };
 
   return (
@@ -37,7 +45,11 @@ const Home = () => {
 
       {/* Login Card */}
       <div className="container d-flex justify-content-center align-items-center min-vh-100" style={{marginTop : "-40vh"}}>
-        <LoginForm onLogin={handleLogin} onForgotPassword={handleForgotPassword} />
+        {loading ? (
+          <LoginProgressCard loading={loading} />  
+        ) : (
+          <LoginForm onLogin={handleLogin} onForgotPassword={handleForgotPassword} setLoading={setLoading} />
+        )}
       </div>
     </div>
   );

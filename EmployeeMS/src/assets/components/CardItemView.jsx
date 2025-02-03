@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const CardItemView = ({ icon: Icon, text }) => {
+const CardItemView = ({ icon: Icon, text, selected, onClick }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const cardStyle = {
@@ -9,7 +9,7 @@ const CardItemView = ({ icon: Icon, text }) => {
         padding: '10px',
         border: '1px solid #ccc',
         borderRadius: '8px',
-        backgroundColor: isHovered ? '#FFD700' : '#fff', 
+        backgroundColor: selected ? '#FFD700' : (isHovered ? '#FFD700' : '#fff'), 
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         marginBottom: '10px',
         cursor: 'pointer',
@@ -21,6 +21,7 @@ const CardItemView = ({ icon: Icon, text }) => {
             style={cardStyle}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)} 
+            onClick={onClick}
         >
             <div style={styles.iconContainer}>
                 <Icon size={24} />

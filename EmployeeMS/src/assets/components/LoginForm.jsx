@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import useLoginForm from "../functions/useLoginForm";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 
-const LoginForm = ({ onLogin, onForgotPassword }) => {
-  const { formData, errors, handleChange, handleSubmit } = useLoginForm(onLogin);
+const LoginForm = ({ onLogin, onForgotPassword, setLoading }) => {
+  const { formData, errors, handleChange, handleSubmit } = useLoginForm(onLogin, setLoading);
 
   return (
     <form onSubmit={handleSubmit}>

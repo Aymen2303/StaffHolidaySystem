@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { supabase } from './SupabaseClient';
 import { useNavigate } from 'react-router-dom';
 
-const useLoginForm = (onLogin) => {
+const useLoginForm = (onLogin, setLoading) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -34,6 +34,8 @@ const useLoginForm = (onLogin) => {
       return;
     }
 
+    setLoading(true);  // Start loading
+
     try {
       // Sign in with Supabase
       console.log('Attempting to log in with:', formData.email);
@@ -42,18 +44,21 @@ const useLoginForm = (onLogin) => {
         password: formData.password,
       });
 
-      if (error){
+      if (error) {
         console.error("Login error:", error.message);
-          setErrors({ general: error.message });
-      return;
+        setErrors({ general: error.message });
+        setLoading(false);
+        return;
       }
+      
       // Call the onLogin callback
       console.log('Login successful:', user);
       onLogin(user);
-      navigate('/dashboard');
+      navigate('/dashboard', {state : { email: formData.email } });
     } catch (error) {
       console.error('Login error:', error);
       setErrors({ general: error.message });
+      setLoading(false);
     }
   };
 
