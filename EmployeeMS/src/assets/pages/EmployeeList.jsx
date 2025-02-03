@@ -12,6 +12,7 @@ import UserInfoCard from '../../assets/components/UserInfoCard';
 import '../../assets/styles/AdminPages.css'; 
 import '../styles/EmployeeList.css';
 import userAuthOut from '../functions/LogOut';
+import  fetchEmployeesWithDetails from "../functions/FetchUserInfos";
 
 const EmployeeList = () => {
     const { logout } = userAuthOut();
@@ -22,6 +23,30 @@ const EmployeeList = () => {
         email: location.state?.email || 'default@example.com',
         position: 'Admin',
     });
+
+    const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch employees using the imported function
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchEmployeesWithDetails();
+                if (data) {
+                    setEmployees(data);
+                } else {
+                    setError("No data found.");
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const [selectedItem, setSelectedItem] = useState("Liste des employés");
     const handleItemClick = (route) => {
@@ -77,13 +102,46 @@ const EmployeeList = () => {
                 <div className='user-info'>
                     <UserInfoCard email={user.email} position={user.position} />
                 </div>
-                {/* Table Placeholder */}
-                <div className="table-placeholder">
+                   {/* Employee Table */}
+                   <div className="table-container">
                     <h2>{selectedItem}</h2>
-                    <p>Table content will go here.</p>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : error ? (
+                        <p>Error: {error}</p>
+                    ) : (
+                        <table className="employee-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Résidence</th>
+                                    <th>Service</th>
+                                    <th>Grade</th>
+                                    <th>Jours de congé</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {employees.map((employee) => (
+                                    <tr key={employee.employee_id}>
+                                        <td>{employee.employee_id}</td>
+                                        <td>{employee.nom}</td>
+                                        <td>{employee.prenom}</td>
+                                        <td>{employee.email}</td>
+                                        <td>{employee.residence}</td>
+                                        <td>{employee.Services?.service_name}</td>
+                                        <td>{employee.Grades?.grade_name}</td>
+                                        <td>{employee.total_vacation_days}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
-        </div>
+            </div>
     );
 };
  
