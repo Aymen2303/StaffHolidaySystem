@@ -1,4 +1,3 @@
-// src/assets/functions/useLoginForm.js
 import { useState } from 'react';
 import { supabase } from './SupabaseClient';
 import { useNavigate } from 'react-router-dom';

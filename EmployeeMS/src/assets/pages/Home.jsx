@@ -10,7 +10,7 @@ const Home = () => {
 
   const handleLogin = (user) => {
     console.log("User logged in:", user);
-    setLoading(false);  // Stop loading after login
+    setLoading(false);  
   };
 
   const handleForgotPassword = () => {
@@ -18,7 +18,7 @@ const Home = () => {
   };
 
   const handleSubmit = async (userData) => {
-    setLoading(true);  // Start loading before calling handleLogin
+    setLoading(true);  
     await handleLogin(userData);  
   };
 

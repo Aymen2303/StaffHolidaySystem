@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from "react";
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PiSignOutBold } from "react-icons/pi";
 import { VscNewFile } from "react-icons/vsc"; 
@@ -9,9 +10,10 @@ import CardItemView from '../../assets/components/CardItemView';
 import Button from '../../assets/components/Button';
 import UserInfoCard from '../../assets/components/UserInfoCard';
 import '../../assets/styles/AdminPages.css'; 
+import '../styles/EmployeeList.css';
 import userAuthOut from '../functions/LogOut';
 
-const Dashboard = () => {
+const EmployeeList = () => {
     const { logout } = userAuthOut();
     const location = useLocation();
     const navigate = useNavigate();
@@ -21,7 +23,7 @@ const Dashboard = () => {
         position: 'Admin',
     });
 
-    const [selectedItem, setSelectedItem] = useState("Tableau");
+    const [selectedItem, setSelectedItem] = useState("Liste des employés");
     const handleItemClick = (route) => {
         navigate(route);
     };
@@ -84,5 +86,5 @@ const Dashboard = () => {
         </div>
     );
 };
-
-export default Dashboard;
+ 
+export default EmployeeList;

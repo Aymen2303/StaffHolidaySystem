@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from "react";
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PiSignOutBold } from "react-icons/pi";
 import { VscNewFile } from "react-icons/vsc"; 
@@ -9,9 +10,11 @@ import CardItemView from '../../assets/components/CardItemView';
 import Button from '../../assets/components/Button';
 import UserInfoCard from '../../assets/components/UserInfoCard';
 import '../../assets/styles/AdminPages.css'; 
+import '../styles/Vacation.css';
 import userAuthOut from '../functions/LogOut';
+import VacationForm from "../components/VacationForm";
 
-const Dashboard = () => {
+const vacation = () => {
     const { logout } = userAuthOut();
     const location = useLocation();
     const navigate = useNavigate();
@@ -21,7 +24,7 @@ const Dashboard = () => {
         position: 'Admin',
     });
 
-    const [selectedItem, setSelectedItem] = useState("Tableau");
+    const [selectedItem, setSelectedItem] = useState("Nouveau titre de congé");
     const handleItemClick = (route) => {
         navigate(route);
     };
@@ -76,13 +79,14 @@ const Dashboard = () => {
                     <UserInfoCard email={user.email} position={user.position} />
                 </div>
                 {/* Table Placeholder */}
-                <div className="table-placeholder">
-                    <h2>{selectedItem}</h2>
-                    <p>Table content will go here.</p>
-                </div>
+                 <div className="table-placeholder">
+                    <VacationForm/>
+                </div> 
+
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+ 
+export default vacation;
