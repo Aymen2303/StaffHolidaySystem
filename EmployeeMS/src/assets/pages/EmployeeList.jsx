@@ -131,7 +131,6 @@ const EmployeeList = () => {
                                     const totalDays = 30;
                                     const selected = selectedDays[employee.employee_id] || 0; // Default to 0
                                     const remainingDays = totalDays - selected;
-
                                     return (
                                         <tr key={employee.employee_id}>
                                             <td>{employee.employee_id}</td>
