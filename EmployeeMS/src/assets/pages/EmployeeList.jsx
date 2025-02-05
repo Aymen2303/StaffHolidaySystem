@@ -27,6 +27,9 @@ const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedDays, setSelectedDays] = useState(0);
+    const totalDays = 30;
+    const remainingDays = totalDays - selectedDays;
 
     // Fetch employees using the imported function
     useEffect(() => {
@@ -115,12 +118,12 @@ const EmployeeList = () => {
                                 <tr>
                                     <th>ID</th>
                                     <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>Email</th>
-                                    <th>Résidence</th>
+                                    <th>Prénom</th>                    
                                     <th>Service</th>
                                     <th>Grade</th>
-                                    <th>Jours de congé</th>
+                                    <th>RLQ20</th>
+                                    <th>C/A/C</th>
+                                    <th>RST20</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,11 +132,21 @@ const EmployeeList = () => {
                                         <td>{employee.employee_id}</td>
                                         <td>{employee.nom}</td>
                                         <td>{employee.prenom}</td>
-                                        <td>{employee.email}</td>
-                                        <td>{employee.residence}</td>
                                         <td>{employee.Services?.service_name}</td>
                                         <td>{employee.Grades?.grade_name}</td>
                                         <td>{employee.total_vacation_days}</td>
+                                        <td> <select
+                        value={selectedDays}
+                        onChange={(e) => setSelectedDays(parseInt(e.target.value))}
+                    >
+                        <option value="0">Select Days</option>
+                        {[...Array(30).keys()].map((num) => (
+                            <option key={num + 1} value={num + 1}>
+                                {num + 1}
+                            </option>
+                        ))}
+                    </select></td>
+                                        <td>{remainingDays}</td>
                                     </tr>
                                 ))}
                             </tbody>

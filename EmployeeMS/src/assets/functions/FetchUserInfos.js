@@ -4,7 +4,7 @@ const fetchEmployeesWithDetails = async () => {
     try {
         console.log('Fetching employees...');
 
-        // Step 1: Fetch Employees
+        // Fetch Employees
         const { data: employees, error: employeesError } = await supabase
             .from('employees')
             .select('*');
@@ -16,7 +16,7 @@ const fetchEmployeesWithDetails = async () => {
 
         console.log('Employees fetched successfully:', employees);
 
-        // Step 2: Fetch Services
+        // Fetch Services
         console.log('Fetching services...');
         const { data: services, error: servicesError } = await supabase
             .from('services')
@@ -29,7 +29,7 @@ const fetchEmployeesWithDetails = async () => {
 
         console.log('Services fetched successfully:', services);
 
-        // Step 3: Fetch Grades
+        // Fetch Grades
         console.log('Fetching grades...');
         const { data: grades, error: gradesError } = await supabase
             .from('grades')
@@ -42,7 +42,7 @@ const fetchEmployeesWithDetails = async () => {
 
         console.log('Grades fetched successfully:', grades);
 
-        // Step 4: Combine the data
+        // Combine the data
         console.log('Combining employee, service, and grade data...');
         const employeesWithDetails = employees.map(employee => {
             const service = services.find(s => s.service_id === employee.service_id);
