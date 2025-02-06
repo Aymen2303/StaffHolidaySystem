@@ -128,8 +128,8 @@ const EmployeeList = () => {
                             </thead>
                             <tbody>
                                 {employees.map((employee) => {
-                                    const totalDays = 30;
-                                    const selected = selectedDays[employee.employee_id] || 0; // Default to 0
+                                    const totalDays = employee.total_vacation_days;
+                                    const selected = selectedDays[employee.employee_id] || 0; 
                                     const remainingDays = totalDays - selected;
                                     return (
                                         <tr key={employee.employee_id}>
@@ -147,7 +147,7 @@ const EmployeeList = () => {
                                                     }
                                                 >
                                                     <option value="0">Select Days</option>
-                                                    {[...Array(30).keys()].map((num) => (
+                                                    {[...Array(totalDays).keys()].map((num) => (
                                                         <option key={num + 1} value={num + 1}>
                                                             {num + 1}
                                                         </option>
