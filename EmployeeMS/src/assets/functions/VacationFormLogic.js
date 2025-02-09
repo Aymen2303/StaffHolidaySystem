@@ -31,11 +31,12 @@ const fetchSignataires = async () => {
 const useVacationForm = () => {
   const [formData, setFormData] = useState({
     matricule: "",
-    name: "", // Name field will be dynamically updated
-    poste: "", // Grade field will be dynamically updated
+    name: "",
+    poste: "",
     residence: "",
     dateFrom: "",
     dateTo: "",
+    dureeDeConge: "",  // New field for vacation duration
     reste: 0,
     exercice: new Date().getFullYear(),
     nature: "Annuel",
@@ -71,9 +72,9 @@ const useVacationForm = () => {
         else {
           setFormData((prevData) => ({
             ...prevData,
-            name: `${data.nom} ${data.prenom}`, // Automatically update name
-            poste: data.grade_id, // Automatically update grade
-            residence: data.residence, // Automatically update residence
+            name: `${data.nom} ${data.prenom}`,
+            poste: data.grade_id,
+            residence: data.residence,
           }));
         }
       }
@@ -93,6 +94,18 @@ const useVacationForm = () => {
     return 30 - diffDays;
   };
 
+  // Calculate duration of vacation (dureeDeConge)
+  const calculateDuration = (dateFrom, dateTo) => {
+    if (dateFrom && dateTo) {
+      const from = new Date(dateFrom);
+      const to = new Date(dateTo);
+      const diffTime = Math.abs(to - from);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays;
+    }
+    return 0;  // If no dates are selected, return 0
+  };
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -106,6 +119,15 @@ const useVacationForm = () => {
     console.log("Form data submitted:", formData);
     // Call API to save form data
   };
+
+  // Update the duration dynamically whenever dateFrom or dateTo changes
+  useEffect(() => {
+    const duree = calculateDuration(formData.dateFrom, formData.dateTo);
+    setFormData((prevData) => ({
+      ...prevData,
+      dureeDeConge: duree,
+    }));
+  }, [formData.dateFrom, formData.dateTo]);
 
   return {
     formData,

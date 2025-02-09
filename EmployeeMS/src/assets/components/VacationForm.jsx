@@ -85,6 +85,16 @@ const VacationForm = () => {
           InputLabelProps={{ shrink: true }}
         />
 
+        {/* Duree de Congé (Vacation Duration) */}
+        <TextField
+          label="Durée du Congé (Jours)"
+          name="dureeDeConge"
+          value={formData.dureeDeConge}
+          onChange={handleFormChange}
+          fullWidth
+          disabled // Disable the duration field because it's auto-calculated
+        />
+
         {/* Remaining days */}
         <div>
           <strong>Jours Restants: </strong>
@@ -146,9 +156,6 @@ const VacationForm = () => {
         </Button>
         <Button variant="outlined" color="secondary">
           Annuler
-        </Button>
-        <Button variant="outlined" color="default">
-          Imprimer
         </Button>
       </div>
     </form>
