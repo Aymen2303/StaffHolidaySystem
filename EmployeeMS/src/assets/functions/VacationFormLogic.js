@@ -42,6 +42,7 @@ const useVacationForm = () => {
     nature: "Annuel",
     remplacent: "",
     signataire: "",
+    error: "", // Error message for validation
   });
   const [postes, setPostes] = useState([]);
   const [matricules, setMatricules] = useState([]);
@@ -106,6 +107,7 @@ const useVacationForm = () => {
     return 0;  // If no dates are selected, return 0
   };
 
+  // Handle form input changes
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -114,6 +116,7 @@ const useVacationForm = () => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form data submitted:", formData);
@@ -126,6 +129,7 @@ const useVacationForm = () => {
     setFormData((prevData) => ({
       ...prevData,
       dureeDeConge: duree,
+      error: duree > 30 ? "La durée du congé ne peut pas dépasser 30 jours." : "", // Show error if > 30 days
     }));
   }, [formData.dateFrom, formData.dateTo]);
 

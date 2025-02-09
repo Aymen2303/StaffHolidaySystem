@@ -1,5 +1,5 @@
-import React from "react";
-import { TextField, Select, MenuItem, Button, FormControl, InputLabel } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Typography } from "@mui/material";
 import useVacationForm from "../functions/VacationFormLogic";
 
 const VacationForm = () => {
@@ -13,6 +13,33 @@ const VacationForm = () => {
     handleFormChange,
     handleSubmit
   } = useVacationForm();
+
+  // Ensure the button is only disabled when there is an error or vacation duration exceeds 30 days
+  const isButtonDisabled = formData.error || formData.dureeDeConge > 30;
+
+  // Function to handle form reset
+  const resetForm = () => {
+    // You can reset formData to its initial state here.
+    // Example:
+    formData = {
+      matricule: "",
+      name: "",
+      poste: "",
+      residence: "",
+      dateFrom: "",
+      dateTo: "",
+      dureeDeConge: "",
+      nature: "",
+      remplaçant: "",
+      signataire: "",
+      error: "",
+    };
+  };
+
+  // Function to handle printing the form
+  const handlePrint = () => {
+    window.print(); // Will trigger the browser print dialog
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -30,32 +57,32 @@ const VacationForm = () => {
         >
           {matricules.map((matricule) => (
             <MenuItem key={matricule.employee_id} value={matricule.employee_id}>
-              {matricule.employee_id} {/* Select by employee ID */}
+              {matricule.employee_id}
             </MenuItem>
           ))}
         </TextField>
 
-        {/* Name (automatically updated when matricule changes) */}
+        {/* Name */}
         <TextField
           label="Nom Complet"
           name="name"
           value={formData.name}
           onChange={handleFormChange}
           fullWidth
-          disabled // Disable the name field because it updates automatically
+          disabled // Disable because it updates automatically based on matricule
         />
 
-        {/* Grade (poste) - Automatically updated when matricule changes */}
+        {/* Grade */}
         <TextField
           label="Grade"
           name="poste"
           value={formData.poste}
           onChange={handleFormChange}
           fullWidth
-          disabled // Disable the grade field because it updates automatically
+          disabled
         />
 
-        {/* Residence (auto-filled from employee details) */}
+        {/* Residence */}
         <TextField
           label="Résidence"
           name="residence"
@@ -65,7 +92,7 @@ const VacationForm = () => {
           disabled
         />
 
-        {/* Date From and To */}
+        {/* Date From and Date To */}
         <TextField
           type="date"
           label="Date de début"
@@ -85,17 +112,24 @@ const VacationForm = () => {
           InputLabelProps={{ shrink: true }}
         />
 
-        {/* Duree de Congé (Vacation Duration) */}
+        {/* Duration */}
         <TextField
           label="Durée du Congé (Jours)"
           name="dureeDeConge"
           value={formData.dureeDeConge}
           onChange={handleFormChange}
           fullWidth
-          disabled // Disable the duration field because it's auto-calculated
+          disabled // Disabled because it's auto-calculated
         />
 
-        {/* Remaining days */}
+        {/* Error Message */}
+        {formData.error && (
+          <Typography color="error" variant="body2">
+            {formData.error}
+          </Typography>
+        )}
+
+        {/* Remaining Days */}
         <div>
           <strong>Jours Restants: </strong>
           {formData.dateFrom && formData.dateTo
@@ -103,7 +137,7 @@ const VacationForm = () => {
             : formData.reste}
         </div>
 
-        {/* Nature de congé */}
+        {/* Nature de Congé */}
         <FormControl fullWidth>
           <InputLabel>Nature de congé</InputLabel>
           <Select
@@ -114,7 +148,6 @@ const VacationForm = () => {
           >
             <MenuItem value="Annuel">Annuel</MenuItem>
             <MenuItem value="Maladie">Maladie</MenuItem>
-            <MenuItem value="Maternité">Maternité</MenuItem>
           </Select>
         </FormControl>
 
@@ -150,12 +183,34 @@ const VacationForm = () => {
           ))}
         </TextField>
 
-        {/* Submit Buttons */}
-        <Button type="submit" variant="contained" color="primary">
+        {/* Sauvegarder Button */}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isButtonDisabled} // Ensure this is a boolean value
+        >
           Sauvegarder
         </Button>
-        <Button variant="outlined" color="secondary">
+
+        {/* Cancel Button */}
+        <Button
+          type="button"
+          variant="outlined"
+          color="secondary"
+          onClick={resetForm}
+        >
           Annuler
+        </Button>
+
+        {/* Imprimer Button */}
+        <Button
+          type="button"
+          variant="outlined"
+          color="primary"
+          onClick={handlePrint}
+        >
+          Imprimer
         </Button>
       </div>
     </form>
