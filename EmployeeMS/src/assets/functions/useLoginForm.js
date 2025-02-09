@@ -33,10 +33,9 @@ const useLoginForm = (onLogin, setLoading) => {
       return;
     }
 
-    setLoading(true);  // Start loading
+    setLoading(true); 
 
     try {
-      // Sign in with Supabase
       console.log('Attempting to log in with:', formData.email);
       const { user, error } = await supabase.auth.signInWithPassword({
         email: formData.email,

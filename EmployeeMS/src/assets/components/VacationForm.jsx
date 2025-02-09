@@ -18,7 +18,7 @@ const VacationForm = () => {
     <form onSubmit={handleSubmit}>
       <div className="vacation-form">
         <h2>Formulaire de Congé</h2>
-        
+
         {/* Matricule */}
         <TextField
           select
@@ -29,35 +29,40 @@ const VacationForm = () => {
           fullWidth
         >
           {matricules.map((matricule) => (
-            <MenuItem key={matricule.id} value={matricule.id}>
-              {matricule.name}
+            <MenuItem key={matricule.employee_id} value={matricule.employee_id}>
+              {matricule.employee_id} {/* Select by employee ID */}
             </MenuItem>
           ))}
         </TextField>
 
-        {/* Poste */}
+        {/* Name (automatically updated when matricule changes) */}
         <TextField
-          select
-          label="Poste"
+          label="Nom Complet"
+          name="name"
+          value={formData.name}
+          onChange={handleFormChange}
+          fullWidth
+          disabled // Disable the name field because it updates automatically
+        />
+
+        {/* Grade (poste) - Automatically updated when matricule changes */}
+        <TextField
+          label="Grade"
           name="poste"
           value={formData.poste}
           onChange={handleFormChange}
           fullWidth
-        >
-          {postes.map((poste) => (
-            <MenuItem key={poste.id} value={poste.id}>
-              {poste.label}
-            </MenuItem>
-          ))}
-        </TextField>
+          disabled // Disable the grade field because it updates automatically
+        />
 
-        {/* Residence */}
+        {/* Residence (auto-filled from employee details) */}
         <TextField
           label="Résidence"
           name="residence"
           value={formData.residence}
           onChange={handleFormChange}
           fullWidth
+          disabled
         />
 
         {/* Date From and To */}
@@ -103,7 +108,7 @@ const VacationForm = () => {
           </Select>
         </FormControl>
 
-        {/* Remplacent */}
+        {/* Remplaçant */}
         <TextField
           select
           label="Remplaçant"
@@ -113,8 +118,8 @@ const VacationForm = () => {
           fullWidth
         >
           {remplacents.map((remplacent) => (
-            <MenuItem key={remplacent.id} value={remplacent.id}>
-              {remplacent.name}
+            <MenuItem key={remplacent.employee_id} value={remplacent.employee_id}>
+              {remplacent.nom} {remplacent.prenom}
             </MenuItem>
           ))}
         </TextField>
@@ -129,8 +134,8 @@ const VacationForm = () => {
           fullWidth
         >
           {signataires.map((signataire) => (
-            <MenuItem key={signataire.id} value={signataire.id}>
-              {signataire.name}
+            <MenuItem key={signataire.employee_id} value={signataire.employee_id}>
+              {signataire.nom} {signataire.prenom}
             </MenuItem>
           ))}
         </TextField>

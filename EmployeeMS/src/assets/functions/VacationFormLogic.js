@@ -1,31 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";  
+import { supabase } from "./SupabaseClient";
 
-const fetchPostes = () => [
-  { id: 1, label: "Manager" },
-  { id: 2, label: "Developer" },
-  { id: 3, label: "Designer" }
-];
+// Fetching all necessary data
+const fetchPostes = async () => {
+  const { data, error } = await supabase.from("grades").select("*");
+  if (error) console.error("Error fetching postes:", error);
+  return data || [];
+};
 
-const fetchMatricules = () => [
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Jane Smith" },
-  { id: 3, name: "Jack Johnson" }
-];
+const fetchMatricules = async () => {
+  const { data, error } = await supabase.from("employees").select("employee_id, nom, prenom, grade_id, residence");
+  if (error) console.error("Error fetching matricules:", error);
+  return data || [];
+};
 
-const fetchRemplacents = () => [
-  { id: 1, name: "Employee 1" },
-  { id: 2, name: "Employee 2" },
-];
+const fetchRemplacents = async () => {
+  const { data, error } = await supabase.from("employees").select("employee_id, nom, prenom");
+  if (error) console.error("Error fetching remplacents:", error);
+  return data || [];
+};
 
-const fetchSignataires = () => [
-  { id: 1, name: "Approver 1" },
-  { id: 2, name: "Approver 2" }
-];
+const fetchSignataires = async () => {
+  const { data, error } = await supabase.from("employees")
+    .select("employee_id, nom, prenom, grade_id")
+    .in("grade_id", [4, 5, 6]);
+  if (error) console.error("Error fetching signataires:", error);
+  return data || [];
+};
 
 const useVacationForm = () => {
   const [formData, setFormData] = useState({
     matricule: "",
-    poste: "",
+    name: "", // Name field will be dynamically updated
+    poste: "", // Grade field will be dynamically updated
     residence: "",
     dateFrom: "",
     dateTo: "",
@@ -40,26 +47,55 @@ const useVacationForm = () => {
   const [remplacents, setRemplacents] = useState([]);
   const [signataires, setSignataires] = useState([]);
 
-  // Simulate fetching data from DB
+  // Simulate fetching data from Supabase
   useEffect(() => {
-    setPostes(fetchPostes());
-    setMatricules(fetchMatricules());
-    setRemplacents(fetchRemplacents());
-    setSignataires(fetchSignataires());
+    const fetchData = async () => {
+      setPostes(await fetchPostes());
+      setMatricules(await fetchMatricules());
+      setRemplacents(await fetchRemplacents());
+      setSignataires(await fetchSignataires());
+    };
+    fetchData();
   }, []);
+
+  // Fetch employee details when matricule changes
+  useEffect(() => {
+    const fetchEmployeeDetails = async (employeeId) => {
+      if (employeeId) {
+        const { data, error } = await supabase
+          .from("employees")
+          .select("nom, prenom, grade_id, residence")
+          .eq("employee_id", employeeId)
+          .single();
+        if (error) console.error("Error fetching employee details:", error);
+        else {
+          setFormData((prevData) => ({
+            ...prevData,
+            name: `${data.nom} ${data.prenom}`, // Automatically update name
+            poste: data.grade_id, // Automatically update grade
+            residence: data.residence, // Automatically update residence
+          }));
+        }
+      }
+    };
+
+    if (formData.matricule) {
+      fetchEmployeeDetails(formData.matricule);
+    }
+  }, [formData.matricule]);
 
   // Logic to calculate remaining days for vacation
   const calculateRemainingDays = (dateFrom, dateTo) => {
     const from = new Date(dateFrom);
     const to = new Date(dateTo);
     const diffTime = Math.abs(to - from);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    return 30 - diffDays; 
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return 30 - diffDays;
   };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
