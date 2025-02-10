@@ -113,28 +113,56 @@ const useVacationForm = () => {
   // Handle form input changes
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
+      dureeDeConge: name === "dateFrom" || name === "dateTo" ? calculateDuration(formData.dateFrom, formData.dateTo) : prevData.dureeDeConge
     }));
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
-    // Call API to save form data
+  
+    // Ensure required fields are filled
+    if (!formData.matricule || !formData.dateFrom || !formData.dateTo || !formData.remplacent || !formData.signataire) {
+      setFormData((prevData) => ({
+        ...prevData,
+        error: "Please fill in all the required fields."
+      }));
+      return;
+    }
+  
+    const duration = calculateDuration(formData.dateFrom, formData.dateTo);
+    const remainingDays = 30 - duration; 
+    const today = new Date().toISOString().split("T")[0];
+  
+    // Prepare the data to be inserted into the Vacations table
+    const vacationData = {
+      employee_id: formData.matricule,
+      grade_id: formData.grade_id,
+      residence: formData.residence,
+      nature_conge: formData.nature.toLowerCase(),
+      date_debut: formData.dateFrom,
+      date_fin: formData.dateTo,
+      duree_conge: duration,
+      exercice: formData.exercice,
+      reste_jours: remainingDays,
+      remplacant_id: formData.remplacent,
+      signataire_id: formData.signataire,
+      observation_status: formData.date_fin >= today ? "en cours" : "terminé",
+    };
+    
+    console.log("Vacation Data:", vacationData); 
+    
+    const { data, error } = await supabase.from("vacations").insert([vacationData]);
+    
+    if (error) {
+      console.error("Error inserting data into Vacations:", error);
+    } else {
+      console.log("Vacation data successfully inserted:", data);
+    }
   };
-
-  // Update the duration dynamically whenever dateFrom or dateTo changes
-  useEffect(() => {
-    const duree = calculateDuration(formData.dateFrom, formData.dateTo);
-    setFormData((prevData) => ({
-      ...prevData,
-      dureeDeConge: duree,
-      error: duree > 30 ? "La durée du congé ne peut pas dépasser 30 jours." : "", // Show error if > 30 days
-    }));
-  }, [formData.dateFrom, formData.dateTo]);
 
   return {
     formData,
