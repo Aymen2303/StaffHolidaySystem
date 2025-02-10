@@ -92,4 +92,15 @@
   .print-button:hover {
     background: #444;
   }
-  
+
+  .table-placeholder {
+    flex-grow: 1; 
+    overflow-y: auto; 
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  
+  overflow-y: auto; 
+}

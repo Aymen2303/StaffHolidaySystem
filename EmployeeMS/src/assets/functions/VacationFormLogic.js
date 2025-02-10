@@ -36,13 +36,13 @@ const useVacationForm = () => {
     residence: "",
     dateFrom: "",
     dateTo: "",
-    dureeDeConge: "",  // New field for vacation duration
+    dureeDeConge: "",  
     reste: 0,
     exercice: new Date().getFullYear(),
     nature: "Annuel",
     remplacent: "",
     signataire: "",
-    error: "", // Error message for validation
+    error: "", 
   });
   const [postes, setPostes] = useState([]);
   const [matricules, setMatricules] = useState([]);
@@ -66,16 +66,19 @@ const useVacationForm = () => {
       if (employeeId) {
         const { data, error } = await supabase
           .from("employees")
-          .select("nom, prenom, grade_id, residence")
+          .select("nom, prenom, grade_id, residence, grades(grade_name) ")
           .eq("employee_id", employeeId)
           .single();
         if (error) console.error("Error fetching employee details:", error);
         else {
           setFormData((prevData) => ({
             ...prevData,
+            matricule: employeeId,
             name: `${data.nom} ${data.prenom}`,
-            poste: data.grade_id,
+            poste: data.grades?.grade_name || "N/A",
             residence: data.residence,
+            employeeId: data.employee_id,  
+            grade_id: data.grade_id, 
           }));
         }
       }
@@ -104,7 +107,7 @@ const useVacationForm = () => {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       return diffDays;
     }
-    return 0;  // If no dates are selected, return 0
+    return 0;  
   };
 
   // Handle form input changes

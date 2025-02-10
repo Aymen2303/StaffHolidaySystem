@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Typography } from "@mui/material";
 import useVacationForm from "../functions/VacationFormLogic";
+import "./../styles/VacationForm.css";
 
 const VacationForm = () => {
   const {
@@ -14,13 +15,9 @@ const VacationForm = () => {
     handleSubmit
   } = useVacationForm();
 
-  // Ensure the button is only disabled when there is an error or vacation duration exceeds 30 days
   const isButtonDisabled = formData.error || formData.dureeDeConge > 30;
 
-  // Function to handle form reset
   const resetForm = () => {
-    // You can reset formData to its initial state here.
-    // Example:
     formData = {
       matricule: "",
       name: "",
@@ -36,9 +33,8 @@ const VacationForm = () => {
     };
   };
 
-  // Function to handle printing the form
   const handlePrint = () => {
-    window.print(); // Will trigger the browser print dialog
+    window.print(); 
   };
 
   return (
@@ -63,13 +59,13 @@ const VacationForm = () => {
         </TextField>
 
         {/* Name */}
-        <TextField
+        <TextField  
           label="Nom Complet"
           name="name"
           value={formData.name}
           onChange={handleFormChange}
           fullWidth
-          disabled // Disable because it updates automatically based on matricule
+          disabled 
         />
 
         {/* Grade */}
@@ -119,7 +115,7 @@ const VacationForm = () => {
           value={formData.dureeDeConge}
           onChange={handleFormChange}
           fullWidth
-          disabled // Disabled because it's auto-calculated
+          disabled 
         />
 
         {/* Error Message */}
@@ -187,8 +183,8 @@ const VacationForm = () => {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
-          disabled={isButtonDisabled} // Ensure this is a boolean value
+          sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'darkgreen' } }}
+          disabled={isButtonDisabled} 
         >
           Sauvegarder
         </Button>
@@ -197,7 +193,7 @@ const VacationForm = () => {
         <Button
           type="button"
           variant="outlined"
-          color="secondary"
+          sx={{ color: 'red', borderColor: 'red', '&:hover': { borderColor: 'darkred', color: 'darkred' } }}
           onClick={resetForm}
         >
           Annuler
@@ -207,7 +203,7 @@ const VacationForm = () => {
         <Button
           type="button"
           variant="outlined"
-          color="primary"
+          sx={{ color: 'blue', borderColor: 'blue', '&:hover': { borderColor: 'darkblue', color: 'darkblue' } }}
           onClick={handlePrint}
         >
           Imprimer

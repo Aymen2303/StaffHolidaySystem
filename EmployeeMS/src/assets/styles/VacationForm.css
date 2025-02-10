@@ -1,30 +1,108 @@
-.vacation-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
 .vacation-form {
-  width: 50%;
-  background: #f8f9fa;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  max-height: 80vh;  
+  overflow-y: auto;
 }
 
-h2 {
+.vacation-form h2 {
   text-align: center;
-  color: #333;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+.vacation-form .MuiTextField-root,
+.vacation-form .MuiFormControl-root {
+  margin-bottom: 20px;
 }
 
-.button-group button {
-  flex: 1;
-  margin: 5px;
+.vacation-form .MuiInputLabel-root {
+  color: #555;
+}
+
+.vacation-form .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.vacation-form .MuiOutlinedInput-input {
+  padding: 12px 14px;
+}
+
+.vacation-form .MuiSelect-select {
+  padding: 12px 14px;
+}
+
+.vacation-form .MuiButton-root {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.vacation-form .MuiButton-contained {
+  color: white;
+}
+
+.vacation-form .MuiButton-containedPrimary {
+  background-color: #28a745; /* Green for Sauvegarder */
+}
+
+.vacation-form .MuiButton-containedPrimary:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.vacation-form .MuiButton-outlinedSecondary {
+  color: #dc3545; /* Red for Annuler */
+  border-color: #dc3545;
+}
+
+.vacation-form .MuiButton-outlinedSecondary:hover {
+  color: #c82333; /* Darker red on hover */
+  border-color: #c82333;
+}
+
+.vacation-form .MuiButton-outlined {
+  color: #007bff; /* Blue for Imprimer */
+  border-color: #007bff;
+}
+
+.vacation-form .MuiButton-outlined:hover {
+  color: #0056b3; /* Darker blue on hover */
+  border-color: #0056b3;
+}
+
+.vacation-form .MuiTypography-root {
+  margin-top: 10px;
+  color: #dc3545; /* Error message color */
+}
+
+.vacation-form .remaining-days {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vacation-form {
+    padding: 15px;
+  }
+
+  .vacation-form h2 {
+    font-size: 22px;
+  }
+
+  .vacation-form .MuiButton-root {
+    width: 100%;
+    margin: 5px 0;
+  }
 }
