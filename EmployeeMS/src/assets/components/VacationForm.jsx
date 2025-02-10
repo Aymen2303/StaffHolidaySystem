@@ -18,8 +18,7 @@ const VacationForm = () => {
   const isButtonDisabled = formData.error || formData.dureeDeConge > 30;
 
   const resetForm = () => {
-    // Reset formData to initial state
-    setFormData({
+    setformData = {
       matricule: "",
       name: "",
       poste: "",
@@ -27,15 +26,15 @@ const VacationForm = () => {
       dateFrom: "",
       dateTo: "",
       dureeDeConge: "",
-      nature: "Annuel",
+      nature: "",
       remplaçant: "",
       signataire: "",
       error: "",
-    });
+    };
   };
 
   const handlePrint = () => {
-    window.print();
+    window.print(); 
   };
 
   return (

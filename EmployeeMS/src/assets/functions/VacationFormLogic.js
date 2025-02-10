@@ -113,18 +113,22 @@ const useVacationForm = () => {
   // Handle form input changes
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-      dureeDeConge: name === "dateFrom" || name === "dateTo" ? calculateDuration(formData.dateFrom, formData.dateTo) : prevData.dureeDeConge
-    }));
+  
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+  
+      if (updatedData.dateFrom && updatedData.dateTo) {
+        updatedData.dureeDeConge = calculateDuration(updatedData.dateFrom, updatedData.dateTo);
+      }
+  
+      return updatedData;
+    });
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Ensure required fields are filled
     if (!formData.matricule || !formData.dateFrom || !formData.dateTo || !formData.remplacent || !formData.signataire) {
       setFormData((prevData) => ({
         ...prevData,
@@ -137,7 +141,6 @@ const useVacationForm = () => {
     const remainingDays = 30 - duration; 
     const today = new Date().toISOString().split("T")[0];
   
-    // Prepare the data to be inserted into the Vacations table
     const vacationData = {
       employee_id: formData.matricule,
       grade_id: formData.grade_id,
