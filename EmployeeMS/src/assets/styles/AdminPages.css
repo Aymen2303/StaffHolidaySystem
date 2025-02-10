@@ -85,3 +85,21 @@
     background-color: var(--yellow); 
     color: black; 
   }
+
+  /*style for the observation column*/
+  .status-badge {
+    padding: 10px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-green {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+.status-red {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
