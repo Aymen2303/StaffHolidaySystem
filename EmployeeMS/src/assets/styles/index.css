@@ -2,7 +2,7 @@
   position: absolute;
   top: 10px;
   width: 120px;
-  height: auto; /* Adjust size as needed */
+  height: auto; 
 }
 .left {
   left: 10px;

@@ -1,0 +1,106 @@
+.vacation-form {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
+  }
+  
+  .vacation-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  /* Grid Layout for Form Fields */
+  .vacation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  
+  /* Label Styles */
+  .vacation-grid label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  /* Input & Select Fields */
+  .vacation-grid input,
+  .vacation-grid select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  /* Read-only Fields */
+  .vacation-grid input[readonly] {
+    background: #f3f3f3;
+    cursor: not-allowed;
+  }
+  
+  /* Buttons */
+  .form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .form-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .save-button {
+    background: #007a33;
+    color: white;
+  }
+  
+  .cancel-button {
+    background: #d32f2f;
+    color: white;
+  }
+  
+  .print-button {
+    background: #555;
+    color: white;
+  }
+  
+  /* Hover Effects */
+  .save-button:hover {
+    background: #005e27;
+  }
+  
+  .cancel-button:hover {
+    background: #b22222;
+  }
+  
+  .print-button:hover {
+    background: #444;
+  }
+
+  .table-placeholder {
+    flex-grow: 1; 
+    overflow-y: auto; 
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  
+  overflow-y: auto; 
+}
