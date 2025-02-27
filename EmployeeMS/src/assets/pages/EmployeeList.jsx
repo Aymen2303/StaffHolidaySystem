@@ -29,7 +29,6 @@ const EmployeeList = () => {
     const [selectedDays, setSelectedDays] = useState({});
 
     useEffect(() => {
-        // Retrieve saved selected days from localStorage
         const storedDays = localStorage.getItem("selectedDays");
         if (storedDays) {
             setSelectedDays(JSON.parse(storedDays));
@@ -58,8 +57,6 @@ const EmployeeList = () => {
             [employeeId]: value,
         };
         setSelectedDays(updatedDays);
-
-        // Save to localStorage
         localStorage.setItem("selectedDays", JSON.stringify(updatedDays));
     };
 
@@ -113,8 +110,11 @@ const EmployeeList = () => {
                             </thead>
                             <tbody>
                                 {employees.map((employee) => {
-                                    const totalDays = employee.total_vacation_days;
+                                    const totalDaysTaken = employee.total_vacation_days || 0;
+                                    const RLQ = totalDaysTaken < 30 ? totalDaysTaken : 30;
                                     const selected = selectedDays[employee.employee_id] || 0;
+                                    const RST = RLQ - selected;
+
                                     return (
                                         <tr key={employee.employee_id}>
                                             <td>{employee.employee_id}</td>
@@ -123,18 +123,18 @@ const EmployeeList = () => {
                                             <td>{employee.Services?.service_name}</td>
                                             <td>{employee.Grades?.grade_name}</td>
                                             {[21, 22, 23, 24, 25].map((year) => (
-                                                <td key={`RLQ${year}`}>{employee[`RLQ${year}`] || 0}</td>
+                                                <td key={`RLQ${year}`}>{RLQ}</td>
                                             ))}
                                             <td>
                                                 <select value={selected} onChange={(e) => handleDayChange(employee.employee_id, parseInt(e.target.value))}>
                                                     <option value="0">Select Days</option>
-                                                    {[...Array(totalDays).keys()].map((num) => (
-                                                        <option key={num + 1} value={num + 1}>{num + 1}</option>
+                                                    {[...Array(RLQ + 1).keys()].map((num) => (
+                                                        <option key={num} value={num}>{num}</option>
                                                     ))}
                                                 </select>
                                             </td>
                                             {[21, 22, 23, 24, 25].map((year) => (
-                                                <td key={`RST${year}`}>{(employee[`RLQ${year}`] || 0) - selected}</td>
+                                                <td key={`RST${year}`}>{RST}</td>
                                             ))}
                                         </tr>
                                     );
