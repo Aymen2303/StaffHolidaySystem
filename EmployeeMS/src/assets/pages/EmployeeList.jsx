@@ -26,10 +26,15 @@ const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const [selectedDays, setSelectedDays] = useState({});
 
     useEffect(() => {
+        // Retrieve saved selected days from localStorage
+        const storedDays = localStorage.getItem("selectedDays");
+        if (storedDays) {
+            setSelectedDays(JSON.parse(storedDays));
+        }
+
         const fetchData = async () => {
             try {
                 const data = await fetchEmployeesWithDetails();
@@ -44,16 +49,18 @@ const EmployeeList = () => {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, []);
 
-    // Handle selection of vacation days
     const handleDayChange = (employeeId, value) => {
-        setSelectedDays((prevState) => ({
-            ...prevState,
-            [employeeId]: value, // Store selected days per employee
-        }));
+        const updatedDays = {
+            ...selectedDays,
+            [employeeId]: value,
+        };
+        setSelectedDays(updatedDays);
+
+        // Save to localStorage
+        localStorage.setItem("selectedDays", JSON.stringify(updatedDays));
     };
 
     const handleItemClick = (route) => {
@@ -62,50 +69,24 @@ const EmployeeList = () => {
 
     return (
         <div className="dashboard-container">
-            {/* Sidebar */}
             <div className="sidebar">
-                {/* Logo and Text */}
                 <div className="logo-container">
                     <img src={logo} alt="Logo" className="logo" />
                     <h1 className="logo-text">Souk Ahras</h1>
                 </div>
-
-                {/* Menu Items */}
                 <div className="menu-items">
-                    <CardItemView
-                        icon={MdDashboard}
-                        text="Tableau"
-                        onClick={() => handleItemClick("/dashboard")}
-                        selected={location.pathname === "/dashboard"}
-                    />
-                    <CardItemView
-                        icon={VscNewFile}
-                        text="Nouveau titre de congé"
-                        onClick={() => handleItemClick("/new-vacation")}
-                        selected={location.pathname === "/new-vacation"}
-                    />
-                    <CardItemView
-                        icon={FaListUl}
-                        text="Liste des employés"
-                        onClick={() => handleItemClick("/employees")}
-                        selected={location.pathname === "/employees"}
-                    />
+                    <CardItemView icon={MdDashboard} text="Tableau" onClick={() => handleItemClick("/dashboard")} selected={location.pathname === "/dashboard"} />
+                    <CardItemView icon={VscNewFile} text="Nouveau titre de congé" onClick={() => handleItemClick("/new-vacation")} selected={location.pathname === "/new-vacation"} />
+                    <CardItemView icon={FaListUl} text="Liste des employés" onClick={() => handleItemClick("/employees")} selected={location.pathname === "/employees"} />
                 </div>
-
-                {/* Log Out Button */}
                 <div className="logout-button">
                     <Button onClick={logout} text="Log out" icon={PiSignOutBold} color="#ff4757" />
                 </div>
             </div>
-
-            {/* Main Content */}
             <div className="main-content">
-                {/* User Information Card */}
                 <div className="user-info">
                     <UserInfoCard email={user.email} position={user.position} />
                 </div>
-
-                {/* Employee Table */}
                 <div className="table-container">
                     <h2>Liste des employés</h2>
                     {loading ? (
@@ -121,16 +102,19 @@ const EmployeeList = () => {
                                     <th>Prénom</th>
                                     <th>Service</th>
                                     <th>Grade</th>
-                                    <th>RLQ20</th>
+                                    {[21, 22, 23, 24, 25].map((year) => (
+                                        <th key={`RLQ${year}`}>{`RLQ${year}`}</th>
+                                    ))}
                                     <th>C/A/C</th>
-                                    <th>RST20</th>
+                                    {[21, 22, 23, 24, 25].map((year) => (
+                                        <th key={`RST${year}`}>{`RST${year}`}</th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
                                 {employees.map((employee) => {
                                     const totalDays = employee.total_vacation_days;
-                                    const selected = selectedDays[employee.employee_id] || 0; 
-                                    const remainingDays = totalDays - selected;
+                                    const selected = selectedDays[employee.employee_id] || 0;
                                     return (
                                         <tr key={employee.employee_id}>
                                             <td>{employee.employee_id}</td>
@@ -138,23 +122,20 @@ const EmployeeList = () => {
                                             <td>{employee.prenom}</td>
                                             <td>{employee.Services?.service_name}</td>
                                             <td>{employee.Grades?.grade_name}</td>
-                                            <td>{employee.total_vacation_days}</td> {/* RLQ20: Employee's vacation days */}
+                                            {[21, 22, 23, 24, 25].map((year) => (
+                                                <td key={`RLQ${year}`}>{employee[`RLQ${year}`] || 0}</td>
+                                            ))}
                                             <td>
-                                                <select
-                                                    value={selected}
-                                                    onChange={(e) =>
-                                                        handleDayChange(employee.employee_id, parseInt(e.target.value))
-                                                    }
-                                                >
+                                                <select value={selected} onChange={(e) => handleDayChange(employee.employee_id, parseInt(e.target.value))}>
                                                     <option value="0">Select Days</option>
                                                     {[...Array(totalDays).keys()].map((num) => (
-                                                        <option key={num + 1} value={num + 1}>
-                                                            {num + 1}
-                                                        </option>
+                                                        <option key={num + 1} value={num + 1}>{num + 1}</option>
                                                     ))}
                                                 </select>
                                             </td>
-                                            <td>{remainingDays}</td> {/* RST20: Remaining days after selection */}
+                                            {[21, 22, 23, 24, 25].map((year) => (
+                                                <td key={`RST${year}`}>{(employee[`RLQ${year}`] || 0) - selected}</td>
+                                            ))}
                                         </tr>
                                     );
                                 })}
