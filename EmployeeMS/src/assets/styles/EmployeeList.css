@@ -1,0 +1,39 @@
+/* Table Container */
+.table-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Employee Table */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.employee-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.employee-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Loading and Error Messages */
+.table-container p {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
