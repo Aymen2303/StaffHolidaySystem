@@ -42,11 +42,12 @@ const fetchEmployeesWithDetails = async () => {
 
         console.log("Grades fetched successfully:", grades);
 
-        // Fetch Vacation Data
-        console.log("Fetching vacations...");
+        // Fetch the Latest Vacation for Each Employee (based on highest vacation_id)
+        console.log("Fetching latest vacations...");
         const { data: vacations, error: vacationsError } = await supabase
             .from("vacations")
-            .select("*");
+            .select("employee_id, nature_conge, date_debut, date_fin, duree_conge, observation_status, vacation_id")
+            .order("vacation_id", { ascending: false });
 
         if (vacationsError) {
             console.error("Error fetching vacations:", vacationsError);
@@ -55,19 +56,20 @@ const fetchEmployeesWithDetails = async () => {
 
         console.log("Vacations fetched successfully:", vacations);
 
+        // Get the latest vacation for each employee (highest vacation_id)
+        const latestVacations = {};
+        vacations.forEach((vacation) => {
+            if (!latestVacations[vacation.employee_id]) {
+                latestVacations[vacation.employee_id] = vacation;
+            }
+        });
+
         // Combine the data
         console.log("Combining employee, service, grade, and vacation data...");
         const employeesWithDetails = employees.map((employee) => {
             const service = services.find((s) => s.service_id === employee.service_id);
             const grade = grades.find((g) => g.grade_id === employee.grade_id);
-            const vacation = vacations.find((v) => v.employee_id === employee.employee_id);
-
-            console.log(`Processing employee ${employee.employee_id}:`, {
-                employee,
-                service,
-                grade,
-                vacation,
-            });
+            const vacation = latestVacations[employee.employee_id]; 
 
             return {
                 ...employee,
@@ -78,10 +80,11 @@ const fetchEmployeesWithDetails = async () => {
                           nature_conge: vacation.nature_conge || "N/A",
                           date_debut: vacation.date_debut || "N/A",
                           date_fin: vacation.date_fin || "N/A",
-                          duree_conge: vacation.duree_conge || "N/A",
+                          duree_conge: vacation.duree_conge || "N/A", 
                           observation_status: vacation.observation_status || "N/A",
                       }
                     : null,
+                total_vacation_days: vacation ? vacation.duree_conge : 0, 
             };
         });
 
