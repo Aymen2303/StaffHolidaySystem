@@ -144,6 +144,7 @@ const VacationForm = () => {
           >
             <MenuItem value="Annuel">Annuel</MenuItem>
             <MenuItem value="Maladie">Maladie</MenuItem>
+            <MenuItem value="Exceptionnel">Exceptionnel</MenuItem>
           </Select>
         </FormControl>
 
