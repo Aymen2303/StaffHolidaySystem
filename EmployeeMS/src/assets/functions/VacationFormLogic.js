@@ -119,7 +119,9 @@ const useVacationForm = () => {
   
       if (name === "remplacent") {
         const selectedRemplacent = remplacents.find((r) => r.employee_id === value);
-        updatedData.remplacant_name = selectedRemplacent ? `${selectedRemplacent.nom} ${selectedRemplacent.prenom}` : "N/A";
+        updatedData.remplacant_name = selectedRemplacent 
+          ? `${selectedRemplacent.nom} ${selectedRemplacent.prenom}` 
+          : "";
       }
 
       if (name === "signataire") {

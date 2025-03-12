@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";;
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: { padding: 30, fontSize: 12 },
   titleContainer: { textAlign: "center", marginBottom: 20 },
   title: { fontSize: 16, fontWeight: "bold", textAlign: "center" },
-  table: { display: "flex", flexDirection: "column", border: "1px solid black", width: "100%" },
-  row: { flexDirection: "row", borderBottom: "1px solid black", width: "100%" },
-  cell: { flex: 1, padding: 6, borderRight: "1px solid black" },
+  table: { display: "flex", flexDirection: "column", borderWidth: 1, borderColor: "black", borderStyle: "solid", width: "100%" },
+  row: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "black", borderBottomStyle: "solid", width: "100%" },
+  cell: { flex: 1, padding: 6, borderRightWidth: 1, borderRightColor: "black", borderRightStyle: "solid" },
   lastCell: { flex: 1, padding: 6 }, 
   bold: { fontWeight: "bold" },
   centered: { textAlign: "center", marginTop: 30 },
@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
 
 const VacationPDF = ({ formData }) => {
   console.log("Form Data: ", formData);
+  const [pdfData, setPdfData] = useState(formData);
+
+  useEffect(() => {
+    setPdfData(formData);
+  }, [formData]);
   return(
   <Document>
     <Page size="A4" style={styles.page}>
@@ -73,7 +78,7 @@ const VacationPDF = ({ formData }) => {
 
         <View style={styles.row}>
           <Text style={[styles.cell, styles.bold]}>Remplaçant</Text>
-          <Text style={styles.lastCell}>{formData.remplacent_name || "N/A"}</Text>
+          <Text style={styles.lastCell}>{formData.remplacant_name || "N/A"}   </Text> 
         </View>
 
         <View style={styles.row}>

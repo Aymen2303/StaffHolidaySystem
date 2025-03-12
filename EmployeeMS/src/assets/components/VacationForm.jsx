@@ -57,6 +57,7 @@ const VacationForm = () => {
       ...formData,
       reste: remainingDays, 
     };
+    console.log("Remplaçant Name:", formData.remplacant_name);
     const blob = await pdf(<VacationPDF formData={formData} />).toBlob();
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
