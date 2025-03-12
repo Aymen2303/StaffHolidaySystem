@@ -26,19 +26,36 @@ const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedDays, setSelectedDays] = useState({});
+    const [RLQData, setRLQData] = useState({});
 
     useEffect(() => {
-        const storedDays = localStorage.getItem("selectedDays");
-        if (storedDays) {
-            setSelectedDays(JSON.parse(storedDays));
-        }
-
         const fetchData = async () => {
             try {
                 const data = await fetchEmployeesWithDetails();
                 if (data) {
                     setEmployees(data);
+
+                    // Check if RLQData exists in local storage
+                    const storedRLQData = localStorage.getItem("RLQData");
+                    if (storedRLQData) {
+                        // Use the stored RLQData
+                        setRLQData(JSON.parse(storedRLQData));
+                    } else {
+                        // Generate and store RLQ values only on first fetch
+                        const newRLQData = {};
+                        data.forEach(employee => {
+                            newRLQData[employee.employee_id] = {
+                                21: Math.floor(Math.random() * 31),
+                                22: Math.floor(Math.random() * 31),
+                                23: Math.floor(Math.random() * 31),
+                                24: Math.floor(Math.random() * 31),
+                                25: Math.floor(Math.random() * 31),
+                            };
+                        });
+                        setRLQData(newRLQData);
+                        // Save RLQData to local storage
+                        localStorage.setItem("RLQData", JSON.stringify(newRLQData));
+                    }
                 } else {
                     setError("No data found.");
                 }
@@ -48,17 +65,9 @@ const EmployeeList = () => {
                 setLoading(false);
             }
         };
+
         fetchData();
     }, []);
-
-    const handleDayChange = (employeeId, value) => {
-        const updatedDays = {
-            ...selectedDays,
-            [employeeId]: value,
-        };
-        setSelectedDays(updatedDays);
-        localStorage.setItem("selectedDays", JSON.stringify(updatedDays));
-    };
 
     const handleItemClick = (route) => {
         navigate(route);
@@ -110,10 +119,22 @@ const EmployeeList = () => {
                             </thead>
                             <tbody>
                                 {employees.map((employee) => {
-                                    const totalDaysTaken = employee.total_vacation_days || 0;
-                                    const RLQ = totalDaysTaken < 30 ? totalDaysTaken : 30;
-                                    const selected = selectedDays[employee.employee_id] || 0;
-                                    const RST = RLQ - selected;
+                                    if (!RLQData[employee.employee_id]) return null;
+
+                                    let CAC = employee.Vacation?.duree_conge || 0;
+                                    let RLQs = { ...RLQData[employee.employee_id] };
+                                    let RSTs = { ...RLQs };
+
+                                    for (let year of [21, 22, 23, 24, 25]) {
+                                        if (CAC > 0) {
+                                            if (RLQs[year] > 0) {
+                                                let deduction = Math.min(RLQs[year], CAC);
+                                                RLQs[year] -= deduction;
+                                                CAC -= deduction;
+                                            }
+                                        }
+                                        RSTs[year] = RLQs[year];
+                                    }
 
                                     return (
                                         <tr key={employee.employee_id}>
@@ -123,18 +144,11 @@ const EmployeeList = () => {
                                             <td>{employee.Services?.service_name}</td>
                                             <td>{employee.Grades?.grade_name}</td>
                                             {[21, 22, 23, 24, 25].map((year) => (
-                                                <td key={`RLQ${year}`}>{RLQ}</td>
+                                                <td key={`RLQ${year}`}>{RLQs[year]}</td>
                                             ))}
-                                            <td>
-                                                <select value={selected} onChange={(e) => handleDayChange(employee.employee_id, parseInt(e.target.value))}>
-                                                    <option value="0">Select Days</option>
-                                                    {[...Array(RLQ + 1).keys()].map((num) => (
-                                                        <option key={num} value={num}>{num}</option>
-                                                    ))}
-                                                </select>
-                                            </td>
+                                            <td>{employee.Vacation?.duree_conge || 0}</td>
                                             {[21, 22, 23, 24, 25].map((year) => (
-                                                <td key={`RST${year}`}>{RST}</td>
+                                                <td key={`RST${year}`}>{RSTs[year]}</td>
                                             ))}
                                         </tr>
                                     );
