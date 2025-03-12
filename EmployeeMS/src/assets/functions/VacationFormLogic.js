@@ -117,6 +117,17 @@ const useVacationForm = () => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, [name]: value };
   
+      if (name === "remplacent") {
+        const selectedRemplacent = remplacents.find((r) => r.employee_id === value);
+        updatedData.remplacant_name = selectedRemplacent ? `${selectedRemplacent.nom} ${selectedRemplacent.prenom}` : "N/A";
+      }
+
+      if (name === "signataire") {
+        const selectedSignataire = signataires.find((s) => s.employee_id === value);
+        updatedData.signataire_name = selectedSignataire ? `${selectedSignataire.nom} ${selectedSignataire.prenom}` : "N/A";
+        updatedData.signataire_grade = selectedSignataire ? selectedSignataire.grades?.grade_name || "N/A" : "N/A";
+      }      
+  
       if (updatedData.dateFrom && updatedData.dateTo) {
         updatedData.dureeDeConge = calculateDuration(updatedData.dateFrom, updatedData.dateTo);
       }
@@ -124,6 +135,7 @@ const useVacationForm = () => {
       return updatedData;
     });
   };
+  
 
   // Handle form submission
   const handleSubmit = async (e) => {

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Typography } from "@mui/material";
 import useVacationForm from "../functions/VacationFormLogic";
+import { pdf } from "@react-pdf/renderer";
+import VacationPDF from "./VacationPdf";
+import PrintVacationPDF from "./PrintVacationPdf";
 import "./../styles/VacationForm.css";
 
 const VacationForm = () => {
@@ -15,26 +18,48 @@ const VacationForm = () => {
     handleSubmit,
   } = useVacationForm();
 
+  const [savedData, setSavedData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const isButtonDisabled = formData.error || formData.dureeDeConge > 30;
 
-  const resetForm = () => {
-    setformData = {
-      matricule: "",
-      name: "",
-      poste: "",
-      residence: "",
-      dateFrom: "",
-      dateTo: "",
-      dureeDeConge: "",
-      nature: "",
-      remplaçant: "",
-      signataire: "",
-      error: "",
-    };
+  const handleSave = (event) => {
+    event.preventDefault();
+    setSavedData({ ...formData }); 
   };
 
-  const handlePrint = () => {
-    window.print(); 
+  const resetForm = () => {
+    setSavedData(null);
+    handleFormChange({
+      target: {
+        name: "reset",
+        value: {
+          matricule: "",
+          name: "",
+          poste: "",
+          residence: "",
+          dateFrom: "",
+          dateTo: "",
+          dureeDeConge: "",
+          nature: "",
+          remplacent: "",
+          signataire: "",
+          error: "",
+        },
+      },
+    });
+  };
+
+  const handlePrint = async () => {
+    const remainingDays = calculateRemainingDays(formData.dateFrom, formData.dateTo);
+
+    const pdfData = {
+      ...formData,
+      reste: remainingDays, 
+    };
+    const blob = await pdf(<VacationPDF formData={formData} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   };
 
   return (
@@ -53,7 +78,7 @@ const VacationForm = () => {
         >
           {matricules.map((matricule) => (
             <MenuItem key={matricule.employee_id} value={matricule.employee_id}>
-              {matricule.employee_id}
+              {matricule.employee_id} - {matricule.nom} {matricule.prenom}
             </MenuItem>
           ))}
         </TextField>
@@ -207,7 +232,7 @@ const VacationForm = () => {
           sx={{ color: 'blue', borderColor: 'blue', '&:hover': { borderColor: 'darkblue', color: 'darkblue' } }}
           onClick={handlePrint}
         >
-          Imprimer
+        <PrintVacationPDF formData={formData} />
         </Button>
       </div>
     </form>
