@@ -22,7 +22,7 @@ const fetchRemplacents = async () => {
 
 const fetchSignataires = async () => {
   const { data, error } = await supabase.from("employees")
-    .select("employee_id, nom, prenom, grade_id")
+    .select("employee_id, nom, prenom, grade_id, grades(grade_name)")
     .in("grade_id", [4, 5, 6]);
   if (error) console.error("Error fetching signataires:", error);
   return data || [];

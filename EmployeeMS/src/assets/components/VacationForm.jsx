@@ -175,7 +175,7 @@ const VacationForm = () => {
         >
           {signataires.map((signataire) => (
             <MenuItem key={signataire.employee_id} value={signataire.employee_id}>
-              {signataire.nom} {signataire.prenom}
+              {signataire.employee_id} - {signataire.nom} {signataire.prenom} : {signataire.grades?.grade_name || "N/A"}
             </MenuItem>
           ))}
         </TextField>
