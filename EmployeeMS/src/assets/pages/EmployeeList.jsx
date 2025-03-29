@@ -35,13 +35,10 @@ const EmployeeList = () => {
                 if (data) {
                     setEmployees(data);
 
-                    // Check if RLQData exists in local storage
                     const storedRLQData = localStorage.getItem("RLQData");
                     if (storedRLQData) {
-                        // Use the stored RLQData
                         setRLQData(JSON.parse(storedRLQData));
                     } else {
-                        // Generate and store RLQ values only on first fetch
                         const newRLQData = {};
                         data.forEach(employee => {
                             newRLQData[employee.employee_id] = {
@@ -53,7 +50,6 @@ const EmployeeList = () => {
                             };
                         });
                         setRLQData(newRLQData);
-                        // Save RLQData to local storage
                         localStorage.setItem("RLQData", JSON.stringify(newRLQData));
                     }
                 } else {
